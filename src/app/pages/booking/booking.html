@@ -1,0 +1,120 @@
+<div class="booking-container-fluid py-4 px-2">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+    <h2 class="mb-0 text-success fw-bold text-center flex-grow-1">Booking List</h2>
+    <button
+      class="btn btn-success px-4 py-2 fs-5 fw-bold ms-4"
+      (click)="openAddModal()"
+      style="min-width: 140px; color: #222;"
+    >
+      Add New
+    </button>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0 bg-white w-100 custom-table">
+      <thead class="table-success">
+      <tr>
+        <th>Sr No</th>
+        <th>Customer</th>
+        <th>Vehicle</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let booking of filteredBookings(); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ booking.customer?.name }}</td>
+        <td>{{ booking.vehicle?.brand }} {{ booking.vehicle?.model }}</td>
+        <td>{{ booking.dateFrom | date:'shortDate' }}</td>
+        <td>{{ booking.dateTo | date:'shortDate' }}</td>
+        <td>${{ booking.total }}</td>
+        <td>
+          <span [ngClass]="{
+            'badge bg-success': booking.status === 'ACTIVE',
+            'badge bg-secondary': booking.status === 'COMPLETED',
+            'badge bg-danger': booking.status === 'CANCELLED'
+          }">{{ booking.status }}</span>
+        </td>
+        <td>
+          <button
+            class="btn btn-success px-2 py-2 fs-7 fw-bold me-2"
+            (click)="openEditModal(booking)"
+            style="color: #222;"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-danger px-2 py-2 fs-7 fw-bold"
+            (click)="deleteBooking(booking)"
+            style="color: #222;"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!filteredBookings().length" class="text-center text-muted py-4">
+      No bookings found.
+    </div>
+  </div>
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    [ngStyle]="{ display: showModal ? 'block' : 'none', background: showModal ? 'rgba(0,0,0,0.5)' : 'none' }"
+    style="z-index: 1050;"
+    *ngIf="showModal"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editBooking ? 'Edit Booking' : 'Add New Booking' }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="saveBooking()">
+            <div class="mb-3">
+              <label class="form-label">Customer</label>
+              <select class="form-select" [(ngModel)]="formBooking.customer" name="customer" required>
+                <option *ngFor="let c of customers" [ngValue]="c">{{ c.name }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Vehicle</label>
+              <select class="form-select" [(ngModel)]="formBooking.vehicle" name="vehicle" required (change)="calculateTotalPrice()">
+                <option *ngFor="let v of vehicles" [ngValue]="v">{{ v.brand }} {{ v.model }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">From</label>
+              <input type="date" class="form-control" [(ngModel)]="formBooking.dateFrom" name="dateFrom" required (ngModelChange)="calculateTotalPrice()">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">To</label>
+              <input type="date" class="form-control" [(ngModel)]="formBooking.dateTo" name="dateTo" required (ngModelChange)="calculateTotalPrice()">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Total</label>
+              <input type="number" class="form-control" [(ngModel)]="formBooking.total" name="total" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" [(ngModel)]="formBooking.status" name="status" required>
+                <option value="ACTIVE">Active</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+              <button type="submit" class="btn btn-success">{{ editBooking ? 'Save Changes' : 'Add' }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

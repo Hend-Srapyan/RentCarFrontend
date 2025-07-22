@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container-fluid d-flex align-items-center">
+    <a class="navbar-brand fw-bold d-flex align-items-center" routerLink="/dashboard">
+      <span class="me-2">
+        <img src="https://cdn-icons-png.flaticon.com/512/743/743007.png" alt="Car" width="32" height="32" style="filter: invert(1);" />
+      </span>
+      RENT CAR
+    </a>
+    <div class="navbar-center flex-grow-1 mx-auto">
+    <a class="nav-link active fs-5" routerLink="/vehicles">Vehicles</a>
+    <a class="nav-link active fs-5" routerLink="/customer">Customer</a>
+      <a class="nav-link active fs-5" routerLink="/booking">Booking</a>
+      <a class="nav-link active fs-5" routerLink="/reports">Reports</a>
+      <a class="nav-link active fs-5" routerLink="/about">About</a>
+      <a class="nav-link active fs-5" routerLink="/pricing">Pricing</a>
+      <a class="nav-link active fs-5" routerLink="/contacts">Contacts</a>
+    </div>
+    <form
+      class="d-flex ms-3"
+      role="search"
+      style="max-width: 300px;"
+      autocomplete="off"
+      *ngIf="isBookingPage"
+    >
+      <input
+        type="text"
+        class="form-control me-2"
+        style="width: 200px; color: #222;"
+        placeholder="Search"
+        [(ngModel)]="navbarSearchText"
+        name="navbarSearchText"
+        (ngModelChange)="isBookingPage && onBookingSearch($event)"
+      />
+      <button class="btn btn-success" type="button" style="color: #222;">Search</button>
+    </form>
+
+    <form
+      class="d-flex ms-3"
+      role="search"
+      style="max-width: 300px;"
+      autocomplete="off"
+      *ngIf="isVehiclesPage"
+    >
+      <input
+        type="text"
+        class="form-control me-2"
+        style="width: 200px; color: #222;"
+        placeholder="Search"
+        [(ngModel)]="navbarSearchText"
+        name="navbarSearchText"
+        (ngModelChange)="isVehiclesPage && onVehiclesSearch($event)"
+      />
+      <button class="btn btn-warning" type="button" style="color: #222;">Search</button>
+    </form>
+
+    <form
+      class="d-flex ms-3"
+      role="search"
+      style="max-width: 300px;"
+      autocomplete="off"
+      *ngIf="isCustomerPage"
+    >
+      <input
+        type="text"
+        class="form-control me-2"
+        style="width: 200px; color: #222;"
+        placeholder="Search"
+        [(ngModel)]="navbarSearchText"
+        name="navbarSearchText"
+        (ngModelChange)="isCustomerPage && onCustomerSearch($event)"
+      />
+      <button class="btn btn-primary" type="button" style="color: #222;">Search</button>
+    </form>
+    <button *ngIf="isDashboardPage" class="btn btn-danger ms-3" (click)="logout()">Logout</button>
+  </div>
+</nav>
+<router-outlet></router-outlet>

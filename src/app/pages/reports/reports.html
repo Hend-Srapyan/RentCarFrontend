@@ -1,0 +1,72 @@
+<div class="reports-container d-flex flex-column align-items-center justify-content-center py-5">
+  <div class="reports-card card shadow p-4 text-center" style="max-width: 520px; width: 100%; border-radius: 24px;">
+    <div class="mb-3">
+      <span class="d-inline-block bg-dark rounded-circle" style="width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+        <span class="fs-1 text-white">+</span>
+      </span>
+    </div>
+    <h2 class="fw-bold mb-2">Reports &amp; Analytics</h2>
+    <p class="text-muted mb-4">View statistics, revenue, and analytics for your rental business.</p>
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-4">
+        <div class="metric-box bg-light rounded-3 p-3 shadow-sm">
+          <div class="fs-3 fw-bold text-primary">{{ bookingsCount }}</div>
+          <div class="text-muted">Bookings</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="metric-box bg-light rounded-3 p-3 shadow-sm">
+          <div class="fs-3 fw-bold text-success">${{ revenue }}</div>
+          <div class="text-muted">Revenue</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="metric-box bg-light rounded-3 p-3 shadow-sm">
+          <div class="fs-3 fw-bold text-warning">{{ customersCount }}</div>
+          <div class="text-muted">Customers</div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+      <button class="btn btn-warning fw-bold" (click)="openFilter()">Filter</button>
+    </div>
+    <div *ngIf="showFilterBlock" class="filter-placeholder bg-light rounded-3 shadow-sm p-3 mb-3">
+      <div class="mb-2">
+        <button class="btn btn-outline-secondary btn-sm me-1" (click)="setFilter('all')">All</button>
+        <button class="btn btn-outline-secondary btn-sm me-1" (click)="setFilter('day', filterDate)">Day</button>
+        <button class="btn btn-outline-secondary btn-sm me-1" (click)="setFilter('month', filterDate)">Month</button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="setFilter('year', filterDate)">Year</button>
+      </div>
+      <input type="date" class="form-control form-control-sm mb-2" [(ngModel)]="filterDate" (change)="setFilter(filterType, filterDate)" *ngIf="filterType === 'day'">
+      <input type="month" class="form-control form-control-sm mb-2" [(ngModel)]="filterDate" (change)="setFilter(filterType, filterDate)" *ngIf="filterType === 'month'">
+      <select class="form-select form-select-sm mb-2" [(ngModel)]="filterDate" (change)="setFilter(filterType, filterDate)" *ngIf="filterType === 'year'">
+        <option value="" disabled selected>Select year</option>
+        <option *ngFor="let year of getAvailableYears()" [value]="year">{{ year }}</option>
+      </select>
+      <div class="text-muted">Filter by day, month, or year. Метрики обновляются автоматически.</div>
+    </div>
+    <button class="btn btn-info btn-lg fw-bold px-5 py-2 mt-2" style="color: #222;" (click)="openModal()">View Full Reports</button>
+  </div>
+
+  <div *ngIf="showModal" class="modal-backdrop">
+    <div class="modal-content-custom">
+      <h4 class="mb-3">Full Report</h4>
+      <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+        <button class="btn btn-warning fw-bold" (click)="openFilter()">Filter</button>
+      </div>
+      <div *ngIf="showFilterBlock" class="filter-placeholder bg-light rounded-3 shadow-sm p-3 mb-3">
+        <div class="mb-2">
+          <button class="btn btn-outline-secondary btn-sm me-1" (click)="setFilter('all')">All</button>
+          <button class="btn btn-outline-secondary btn-sm me-1" (click)="setFilter('day', filterDate)">Day</button>
+          <button class="btn btn-outline-secondary btn-sm me-1" (click)="setFilter('month', filterDate)">Month</button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="setFilter('year', filterDate)">Year</button>
+        </div>
+        <input type="date" class="form-control form-control-sm mb-2" [(ngModel)]="filterDate" (change)="setFilter(filterType, filterDate)" *ngIf="filterType === 'day'">
+        <input type="month" class="form-control form-control-sm mb-2" [(ngModel)]="filterDate" (change)="setFilter(filterType, filterDate)" *ngIf="filterType === 'month'">
+        <input type="number" class="form-control form-control-sm mb-2" min="1900" max="2100" [(ngModel)]="filterDate" (change)="setFilter(filterType, filterDate)" *ngIf="filterType === 'year'">
+        <div class="text-muted">Filter by day, month, or year. Метрики обновляются автоматически.</div>
+      </div>
+      <button class="btn btn-secondary" (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>

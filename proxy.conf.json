@@ -1,0 +1,18 @@
+{
+  "/vehicles": {
+    "target": "http://localhost:8080",
+    "secure": false
+  },
+  "/customers": {
+    "target": "http://localhost:8080",
+    "secure": false
+  },
+  "/user": {
+    "target": "http://localhost:8080",
+    "secure": false
+  },
+  "/bookings": {
+    "target": "http://localhost:8080",
+    "secure": false
+  }
+}

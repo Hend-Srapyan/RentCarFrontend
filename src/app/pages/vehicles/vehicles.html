@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0 text-warning fw-bold text-center flex-grow-1">Car Portal</h2>
+  <button
+    class="btn btn-warning shadow-sm px-5 py-2 ms-4 fs-4 me-4 mt-2"
+    (click)="openAddModal()"
+    style="min-width: 180px;"
+  >
+    Add New
+  </button>
+</div>
+
+<div class="row">
+  <div class="col-md-3 mb-4" *ngFor="let car of filteredCars()">
+    <div class="card h-100">
+      <img [src]="car.image ? '/vehicles/images/' + car.image : 'assets/placeholder.png'" class="card-img-top" alt="Car image">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <strong>{{car.brand}} ({{car.model}})</strong>
+          </div>
+          <div>
+            {{car.year}}
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <div>
+            $ {{car.dailyRate}}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <button
+          class="btn btn-danger px-2 py-2 fs-7 fw-bold"
+          style="color: #222;"
+          (click)="deleteCar(car)"
+        >
+          Delete
+        </button>
+        <button
+          class="btn btn-warning px-2 py-2 fs-7 fw-bold"
+          style="color: #222;"
+          (click)="openEditModal(car)"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="cars.length === 0" class="text-center text-muted py-4">
+  No cars found.
+</div>
+
+<div class="modal fade show" tabindex="-1"
+     [ngStyle]="{display: showModal ? 'block' : 'none', background: showModal ? 'rgba(0,0,0,0.5)' : 'none'}"
+     style="z-index: 1050;" *ngIf="showModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{isEditMode ? 'Edit Car' : 'Add New Car'}}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveCar()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="regNo" class="form-label">Reg No</label>
+              <input id="regNo" type="text" class="form-control" placeholder="Enter reg no"
+                     [(ngModel)]="vehiclesFormData.regNo" name="regNo" required>
+            </div>
+            <div class="col-md-6">
+              <label for="brand" class="form-label">Brand</label>
+              <input id="brand" type="text" class="form-control" placeholder="Enter brand name"
+                     [(ngModel)]="vehiclesFormData.brand" name="brand" required>
+            </div>
+            <div class="col-md-6">
+              <label for="model" class="form-label">Model</label>
+              <input id="model" type="text" class="form-control" placeholder="Enter model name"
+                     [(ngModel)]="vehiclesFormData.model" name="model" required>
+            </div>
+            <div class="col-md-6">
+              <label for="year" class="form-label">Year</label>
+              <input id="year" type="number" class="form-control" placeholder="Enter year"
+                     [(ngModel)]="vehiclesFormData.year" name="year" required>
+            </div>
+            <div class="col-md-6">
+              <label for="color" class="form-label">Color</label>
+              <input id="color" type="text" class="form-control" placeholder="Enter color"
+                     [(ngModel)]="vehiclesFormData.color" name="color" required>
+            </div>
+            <div class="col-md-6">
+              <label for="dailyRate" class="form-label">Daily Rate</label>
+              <input id="dailyRate" type="number" class="form-control" placeholder="Enter daily rate"
+                     [(ngModel)]="vehiclesFormData.dailyRate" name="dailyRate" required>
+            </div>
+            <div class="col-12">
+              <label for="carImage" class="form-label">Car Image</label>
+              <input id="carImage" type="file" class="form-control" name="image" (change)="onImageSelected($event)">
+              <div *ngIf="vehiclesFormData.image" class="mt-2">
+                <img [src]="vehiclesFormData.image" alt="Preview"
+                     style="max-width: 200px; max-height: 120px; border-radius: 8px; border: 1px solid #ccc;" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="error" class="error" style="margin-top: 10px;">{{ error }}</div>
+          <div class="mt-4 d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary px-4" (click)="resetForm()">Reset</button>
+            <button type="submit" class="btn btn-success px-4">{{isEditMode ? 'Save Changes' : 'Save Car'}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

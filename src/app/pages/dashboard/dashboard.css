@@ -1,0 +1,35 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(rgba(30,30,30,0.55), rgba(30,30,30,0.55)), url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1200&q=80') no-repeat center center fixed;
+  background-size: cover;
+  padding: 0 0.5rem 2rem 0.5rem;
+  margin: 0;
+}
+
+.dashboard-container .row.g-4 {
+  margin-bottom: 2.5rem;
+}
+
+.dashboard-action-card {
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+  background: #fff;
+}
+
+.card-body {
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .dashboard-container {
+    padding: 0 0.2rem 1rem 0.2rem;
+  }
+}
+@media (max-width: 600px) {
+  .dashboard-container {
+    padding: 0 0.1rem 0.5rem 0.1rem;
+  }
+  .dashboard-action-card .card-body {
+    font-size: 0.95rem;
+  }
+}

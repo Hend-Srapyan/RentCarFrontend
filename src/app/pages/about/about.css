@@ -1,0 +1,35 @@
+.about-container {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(30,30,30,0.55), rgba(30,30,30,0.55)), url('https://images.unsplash.com/photo-1461632830798-3adb3034e4c8?auto=format&fit=crop&w=1200&q=80') no-repeat center center fixed;
+  background-size: cover;
+}
+.about-card {
+  border-radius: 24px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+  background: #fff;
+}
+.feature-box {
+  min-height: 90px;
+}
+.mission-box {
+  background: #f8f9fa;
+}
+.contacts-box {
+  font-size: 1.08rem;
+}
+@media (max-width: 900px) {
+  .about-container {
+    padding: 1rem 0.2rem;
+  }
+}
+@media (max-width: 600px) {
+  .about-container {
+    padding: 0.5rem 0.1rem;
+  }
+  .feature-box {
+    font-size: 0.95rem;
+  }
+} 

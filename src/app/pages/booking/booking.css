@@ -1,0 +1,57 @@
+.booking-container-fluid {
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0 0.5rem;
+}
+.booking-container-fluid h2 {
+  letter-spacing: 0.5px;
+}
+.booking-container-fluid .btn {
+  font-size: 1.15rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+.custom-table th, .custom-table td {
+  vertical-align: middle;
+}
+.table-success th {
+  background: #d1e7dd !important;
+  color: #222;
+}
+.table-success {
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+.booking-container-fluid .modal-content {
+  border-radius: 14px;
+}
+.booking-container-fluid .modal-header {
+  border-bottom: 1px solid #e0e0e0;
+}
+.booking-container-fluid .modal-title {
+  font-weight: 700;
+}
+.booking-container-fluid .form-label {
+  font-weight: 500;
+}
+.booking-container-fluid input[type="text"],
+.booking-container-fluid input[type="date"],
+.booking-container-fluid input[type="number"],
+.booking-container-fluid select {
+  font-size: 1.08rem;
+  border-radius: 7px;
+}
+@media (max-width: 900px) {
+  .booking-container-fluid {
+    padding: 1rem 0.2rem;
+  }
+}
+@media (max-width: 600px) {
+  .booking-container-fluid {
+    padding: 0.5rem 0.1rem;
+  }
+  .custom-table th, .custom-table td {
+    font-size: 0.95rem;
+  }
+}

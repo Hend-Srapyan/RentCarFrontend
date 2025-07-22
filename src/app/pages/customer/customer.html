@@ -1,0 +1,94 @@
+<div class="customer-container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 text-primary fw-bold text-center flex-grow-1">Customer List</h2>
+    <button
+      class="btn btn-primary px-5 py-2 ms-4 fs-4 me-4"
+      (click)="openAddModal()"
+      style="min-width: 180px; color: #222;"
+    >
+      Add New
+    </button>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0 bg-white w-100 custom-table">
+      <thead class="table-primary">
+      <tr>
+        <th>Sr No</th>
+        <th>Name</th>
+        <th>City</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let customer of filteredCustomers(); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td class="fw-semibold">{{ customer.name }}</td>
+        <td>{{ customer.city }}</td>
+        <td>{{ customer.mobile }}</td>
+        <td>{{ customer.email }}</td>
+        <td>
+          <button
+            class="btn btn-primary px-2 py-2 fs-7 fw-bold me-2"
+            (click)="openEditModal(customer)"
+            style="color: #222;"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-danger px-2 py-2 fs-7 fw-bold"
+            (click)="deleteCustomer(customer)"
+            style="color: #222;"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!filteredCustomers().length" class="text-center text-muted py-4">
+      No customers found.
+    </div>
+  </div>
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    [ngStyle]="{ display: showModal ? 'block' : 'none', background: showModal ? 'rgba(0,0,0,0.5)' : 'none' }"
+    style="z-index: 1050;"
+    *ngIf="showModal"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editCustomer ? 'Edit Customer' : 'Add New Customer' }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="saveCustomer()">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="formCustomer.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">City</label>
+              <input type="text" class="form-control" [(ngModel)]="formCustomer.city" name="city" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mobile</label>
+              <input type="text" class="form-control" [(ngModel)]="formCustomer.mobile" name="mobile" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="formCustomer.email" name="email" required>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary">{{ editCustomer ? 'Save Changes' : 'Add' }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
