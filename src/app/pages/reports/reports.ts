@@ -5,7 +5,7 @@ import { BookingService } from '../../service/booking.service';
 import { CustomerService } from '../../service/customer.service';
 import { BookingModel } from '../../model/booking.model';
 import { PageResponse } from '../../model/page-response.model';
-import { Customer } from '../../service/customer.service';
+import { CustomerModel } from '../../model/customer.model';
 
 @Component({
   selector: 'app-reports',
@@ -40,7 +40,7 @@ export class ReportsComponent implements OnInit {
       this.bookings = bookings.content;
       this.applyFilter();
     });
-    this.customerService.getAll(0, 10, 'id', 'asc').subscribe((customers: PageResponse<Customer>) => {
+    this.customerService.getAll(0, 10, 'id', 'asc').subscribe((customers: PageResponse<CustomerModel>) => {
       this.customers = customers.content;
     });
   }

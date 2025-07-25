@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { BookingService } from '../../service/booking.service';
 import { BookingModel } from '../../model/booking.model';
-import { Customer, CustomerService } from '../../service/customer.service';
+import {CustomerService } from '../../service/customer.service';
+import { CustomerModel } from '../../model/customer.model';
 import { VehicleModel } from '../../model/vehicle.model';
 import { VehicleService } from '../../service/vehicle.service';
 import { SearchService } from '../../service/search.service';
@@ -26,7 +27,7 @@ export class Booking implements OnInit, OnDestroy {
   direction = 'asc';
   error: string = '';
   loading: boolean = false;
-  customers: Customer[] = [];
+  customers: CustomerModel[] = [];
   vehicles: VehicleModel[] = [];
   showModal = false;
   formBooking: BookingModel = this.getInitialFormBooking();
@@ -78,7 +79,7 @@ export class Booking implements OnInit, OnDestroy {
     }
 
   loadAllData() {
-    this.customerService.getAll(0, 10, 'id', 'asc').subscribe((data: PageResponse<Customer>) => this.customers = data.content);
+    this.customerService.getAll(0, 10, 'id', 'asc').subscribe((data: PageResponse<CustomerModel>) => this.customers = data.content);
     this.vehicleService.getAll(0, 10, 'id', 'asc').subscribe(data => this.vehicles = data.content);
   }
 

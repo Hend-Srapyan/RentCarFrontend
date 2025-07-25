@@ -3,7 +3,8 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {SearchService} from '../../service/search.service';
 import {Subscription} from 'rxjs';
-import { Customer, CustomerService } from '../../service/customer.service';
+import { CustomerService } from '../../service/customer.service';
+import { CustomerModel } from '../../model/customer.model';
 import { PageResponse } from '../../model/page-response.model';
 
 @Component({
@@ -15,7 +16,7 @@ import { PageResponse } from '../../model/page-response.model';
 })
 
 export class CustomerComponent implements OnInit, OnDestroy {
-  customers: Customer[] = [];
+  customers: CustomerModel[] = [];
   totalElements = 0;
   page = 0;
   size = 10;
@@ -24,10 +25,10 @@ export class CustomerComponent implements OnInit, OnDestroy {
   error: string = '';
   loading: boolean = false;
   showModal = false;
-  formCustomer: Customer = { name: '', city: '', mobile: '', email: '' };
+  formCustomer: CustomerModel = { name: '', city: '', mobile: '', email: '' };
   searchText: string = '';
   private searchSub: Subscription;
-  editCustomer: Customer | null = null;
+  editCustomer: CustomerModel | null = null;
 
   constructor(private searchService: SearchService, private customerService: CustomerService) {
     this.searchSub = this.searchService.customerSearch$.subscribe((text: string) => {
@@ -46,7 +47,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   loadCustomers() {
     this.loading = true;
     this.customerService.getAll(this.page, this.size, this.sort, this.direction)
-      .subscribe((data: PageResponse<Customer>) => {
+      .subscribe((data: PageResponse<CustomerModel>) => {
         this.customers = data.content;
         this.totalElements = data.totalElements;
         this.loading = false;
@@ -62,7 +63,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
     this.showModal = true;
   }
 
-  openEditModal(customer: Customer) {
+  openEditModal(customer: CustomerModel) {
     this.formCustomer = { ...customer };
     this.editCustomer = customer;
     this.showModal = true;
