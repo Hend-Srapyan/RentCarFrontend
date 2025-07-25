@@ -15,6 +15,11 @@ import { Subscription } from 'rxjs';
 })
 export class Vehicles implements OnInit, OnDestroy {
   cars: VehicleModel[] = [];
+  totalElements = 0;
+  page = 0;
+  size = 4;
+  sort = 'id';
+  direction = 'asc';
   showModal = false;
   isEditMode = false;
   editCar: VehicleModel | null = null;
@@ -51,16 +56,15 @@ export class Vehicles implements OnInit, OnDestroy {
 
   loadCars() {
     this.loading = true;
-    this.vehicleService.getAll().subscribe({
-      next: (cars) => {
-        this.cars = cars;
+    this.vehicleService.getAll(this.page, this.size, this.sort, this.direction)
+      .subscribe((data) => {
+        this.cars = data.content;
+        this.totalElements = data.totalElements;
         this.loading = false;
-      },
-      error: () => {
+      }, () => {
         this.error = 'Failed to load vehicles';
         this.loading = false;
-      }
-    });
+      });
   }
 
   onSearch() {
@@ -218,5 +222,16 @@ export class Vehicles implements OnInit, OnDestroy {
       (car.dailyRate && car.dailyRate.toString().includes(text)) ||
       (car.regNo && car.regNo.toLowerCase().includes(text))
     );
+  }
+
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadCars();
+  }
+
+  onSortChange(sort: string, direction: string) {
+    this.sort = sort;
+    this.direction = direction;
+    this.loadCars();
   }
 }

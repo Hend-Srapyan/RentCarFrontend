@@ -8,6 +8,7 @@ import { Customer, CustomerService } from '../../service/customer.service';
 import { VehicleModel } from '../../model/vehicle.model';
 import { VehicleService } from '../../service/vehicle.service';
 import { SearchService } from '../../service/search.service';
+import { PageResponse } from '../../model/page-response.model';
 
 @Component({
   selector: 'app-booking',
@@ -18,6 +19,13 @@ import { SearchService } from '../../service/search.service';
 })
 export class Booking implements OnInit, OnDestroy {
   bookings: BookingModel[] = [];
+  totalElements = 0;
+  page = 0;
+  size = 10;
+  sort = 'id';
+  direction = 'asc';
+  error: string = '';
+  loading: boolean = false;
   customers: Customer[] = [];
   vehicles: VehicleModel[] = [];
   showModal = false;
@@ -34,6 +42,7 @@ export class Booking implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.loadBookings();
     this.loadAllData();
     this.searchSub = this.searchService.bookingSearch$.subscribe((query) => {
       this.searchQuery = query;
@@ -44,10 +53,33 @@ export class Booking implements OnInit, OnDestroy {
     this.searchSub?.unsubscribe();
     }
 
+  loadBookings() {
+    this.loading = true;
+    this.bookingService.getAllBookings(this.page, this.size, this.sort, this.direction)
+      .subscribe((data) => {
+        this.bookings = data.content;
+        this.totalElements = data.totalElements;
+        this.loading = false;
+      }, () => {
+        this.error = 'Failed to load bookings';
+        this.loading = false;
+      });
+  }
+
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadBookings();
+  }
+
+  onSortChange(sort: string, direction: string) {
+    this.sort = sort;
+    this.direction = direction;
+    this.loadBookings();
+    }
+
   loadAllData() {
-    this.bookingService.getAllBookings().subscribe(data => this.bookings = data);
-    this.customerService.getAll().subscribe(data => this.customers = data);
-    this.vehicleService.getAll().subscribe(data => this.vehicles = data);
+    this.customerService.getAll(0, 10, 'id', 'asc').subscribe((data: PageResponse<Customer>) => this.customers = data.content);
+    this.vehicleService.getAll(0, 10, 'id', 'asc').subscribe(data => this.vehicles = data.content);
   }
 
   getInitialFormBooking(): BookingModel {
@@ -88,23 +120,17 @@ export class Booking implements OnInit, OnDestroy {
   }
 
   saveBooking() {
-    if (this.editBooking) {
-      this.bookingService.updateBooking(this.formBooking).subscribe(() => {
-        this.loadAllData();
-        this.closeModal();
-      });
+    if (this.formBooking.id) {
+      this.bookingService.update(this.formBooking).subscribe(() => this.loadBookings());
     } else {
-      this.bookingService.createBooking(this.formBooking).subscribe(() => {
-        this.loadAllData();
-        this.closeModal();
-      });
+      this.bookingService.create(this.formBooking).subscribe(() => this.loadBookings());
+      this.closeModal();
     }
   }
 
-  deleteBooking(booking: BookingModel) {
-    if (booking.id) {
-      this.bookingService.deleteBooking(booking.id).subscribe(() => this.loadAllData());
-    }
+  deleteBooking(id?: number) {
+    if (id === undefined) return;
+    this.bookingService.delete(id).subscribe(() => this.loadBookings());
   }
 
   closeModal() {

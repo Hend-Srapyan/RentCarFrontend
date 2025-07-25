@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VehicleModel } from '../model/vehicle.model';
+import { PageResponse } from '../model/page-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class VehicleService {
@@ -9,8 +10,12 @@ export class VehicleService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<VehicleModel[]> {
-    return this.http.get<VehicleModel[]>(this.url);
+  getAll(page: number, size: number, sort: string, direction: string): Observable<PageResponse<VehicleModel>> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', `${sort},${direction}`);
+    return this.http.get<PageResponse<VehicleModel>>(this.url, { params });
   }
 
   addVehicle(formData: FormData) {

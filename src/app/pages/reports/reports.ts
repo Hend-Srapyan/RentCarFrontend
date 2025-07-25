@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { BookingService } from '../../service/booking.service';
 import { CustomerService } from '../../service/customer.service';
 import { BookingModel } from '../../model/booking.model';
+import { PageResponse } from '../../model/page-response.model';
+import { Customer } from '../../service/customer.service';
 
 @Component({
   selector: 'app-reports',
@@ -14,7 +16,6 @@ import { BookingModel } from '../../model/booking.model';
 })
 export class ReportsComponent implements OnInit {
   showModal = false;
-  showChartBlock = false;
   showFilterBlock = false;
 
   bookings: BookingModel[] = [];
@@ -35,12 +36,12 @@ export class ReportsComponent implements OnInit {
   }
 
   loadData() {
-    this.bookingService.getAllBookings().subscribe(bookings => {
-      this.bookings = bookings;
+    this.bookingService.getAllBookings(0, 10, 'id', 'asc').subscribe((bookings: PageResponse<BookingModel>) => {
+      this.bookings = bookings.content;
       this.applyFilter();
     });
-    this.customerService.getAll().subscribe(customers => {
-      this.customers = customers;
+    this.customerService.getAll(0, 10, 'id', 'asc').subscribe((customers: PageResponse<Customer>) => {
+      this.customers = customers.content;
     });
   }
 

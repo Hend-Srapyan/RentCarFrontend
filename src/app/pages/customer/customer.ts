@@ -3,7 +3,8 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {SearchService} from '../../service/search.service';
 import {Subscription} from 'rxjs';
-import {Customer, CustomerService} from '../../service/customer.service';
+import { Customer, CustomerService } from '../../service/customer.service';
+import { PageResponse } from '../../model/page-response.model';
 
 @Component({
   selector: 'app-customer',
@@ -15,6 +16,13 @@ import {Customer, CustomerService} from '../../service/customer.service';
 
 export class CustomerComponent implements OnInit, OnDestroy {
   customers: Customer[] = [];
+  totalElements = 0;
+  page = 0;
+  size = 10;
+  sort = 'id';
+  direction = 'asc';
+  error: string = '';
+  loading: boolean = false;
   showModal = false;
   formCustomer: Customer = { name: '', city: '', mobile: '', email: '' };
   searchText: string = '';
@@ -36,7 +44,16 @@ export class CustomerComponent implements OnInit, OnDestroy {
   }
 
   loadCustomers() {
-    this.customerService.getAll().subscribe(data => this.customers = data);
+    this.loading = true;
+    this.customerService.getAll(this.page, this.size, this.sort, this.direction)
+      .subscribe((data: PageResponse<Customer>) => {
+        this.customers = data.content;
+        this.totalElements = data.totalElements;
+        this.loading = false;
+      }, () => {
+        this.error = 'Failed to load customers';
+        this.loading = false;
+      });
   }
 
   openAddModal() {
@@ -52,23 +69,17 @@ export class CustomerComponent implements OnInit, OnDestroy {
   }
 
   saveCustomer() {
-    if (this.editCustomer) {
-      this.customerService.update(this.formCustomer).subscribe(() => {
-        this.loadCustomers();
-        this.closeModal();
-      });
+    if (this.formCustomer.id) {
+      this.customerService.update(this.formCustomer).subscribe(() => this.loadCustomers());
     } else {
-      this.customerService.create(this.formCustomer).subscribe(() => {
-        this.loadCustomers();
-        this.closeModal();
-      });
+      this.customerService.create(this.formCustomer).subscribe(() => this.loadCustomers());
+      this.closeModal()
     }
   }
 
-  deleteCustomer(customer: Customer) {
-    if (customer.id) {
-      this.customerService.delete(customer.id).subscribe(() => this.loadCustomers());
-    }
+  deleteCustomer(id?: number) {
+    if (id === undefined) return;
+    this.customerService.delete(id).subscribe(() => this.loadCustomers());
   }
 
   closeModal() {
@@ -87,6 +98,17 @@ export class CustomerComponent implements OnInit, OnDestroy {
       c.mobile.toLowerCase().includes(text) ||
       c.email.toLowerCase().includes(text)
     );
+  }
+
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadCustomers();
+  }
+
+  onSortChange(sort: string, direction: string) {
+    this.sort = sort;
+    this.direction = direction;
+    this.loadCustomers();
   }
 }
 export { CustomerComponent as Customer };
