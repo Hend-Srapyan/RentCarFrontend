@@ -72,9 +72,10 @@ export class CustomerComponent implements OnInit, OnDestroy {
   saveCustomer() {
     if (this.formCustomer.id) {
       this.customerService.update(this.formCustomer).subscribe(() => this.loadCustomers());
+      this.closeModal();
     } else {
       this.customerService.create(this.formCustomer).subscribe(() => this.loadCustomers());
-      this.closeModal()
+      this.closeModal();
     }
   }
 

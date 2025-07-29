@@ -118,11 +118,13 @@ export class Booking implements OnInit, OnDestroy {
     };
     this.editBooking = booking;
     this.showModal = true;
+
   }
 
   saveBooking() {
     if (this.formBooking.id) {
       this.bookingService.update(this.formBooking).subscribe(() => this.loadBookings());
+      this.closeModal();
     } else {
       this.bookingService.create(this.formBooking).subscribe(() => this.loadBookings());
       this.closeModal();
